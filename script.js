@@ -26,7 +26,16 @@ let UIController = (() => {
 
 //App Controller Module
 let AppController = ((budgetCtrl, UIContrl) => {
-  let DOM = UIContrl.getDomStrings();
+  let setupEventListener = () => {
+    let DOM = UIContrl.getDomStrings();
+    document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
+
+    document.addEventListener('keypress', (event) => {
+      if (event.keyCode === 13 || event.which === 13) {
+        ctrlAddItem();
+      }
+    });
+  };
 
   let ctrlAddItem = () => {
     //1. Get input data from field
@@ -39,11 +48,12 @@ let AppController = ((budgetCtrl, UIContrl) => {
     //5. Display budget to UI
   };
 
-  document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
-
-  document.addEventListener('keypress', (event) => {
-    if (event.keyCode === 13 || event.which === 13) {
-      ctrlAddItem();
-    }
-  });
+  return {
+    init: () => {
+      console.log('START');
+      setupEventListener();
+    },
+  };
 })(budgetController, UIController);
+
+AppController.init();
